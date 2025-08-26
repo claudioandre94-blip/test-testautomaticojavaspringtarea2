@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌡️ Conversor de Temperaturas - API REST</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌡️</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🌡️ Conversor de Temperaturas</h1>
+            <p>API REST desarrollada con Java Spring Boot</p>
+            <div class="api-info">
+                <span>Endpoints disponibles: </span>
+                <a href="/api/temperature/info" target="_blank">Ver API Info</a> | 
+                <a href="/api/swagger-ui.html" target="_blank">Documentación Swagger</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="converter-section">
+                <div class="card">
+                    <div class="card__header">
+                        <h2>🔄 Convertir Temperatura</h2>
+                    </div>
+                    <div class="card__body">
+                        <form id="temperatureForm" class="temperature-form">
+                            <div class="form-group">
+                                <label for="temperature" class="form-label">Temperatura</label>
+                                <input 
+                                    type="number" 
+                                    id="temperature" 
+                                    class="form-control" 
+                                    placeholder="Ingrese la temperatura"
+                                    step="0.01"
+                                    min="-273.15"
+                                    max="10000"
+                                    required
+                                >
+                                <div id="inputError" class="error-message hidden"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Tipo de Conversión</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input 
+                                            type="radio" 
+                                            id="celsiusToFahrenheit" 
+                                            name="conversionType" 
+                                            value="celsius-to-fahrenheit"
+                                            checked
+                                        >
+                                        <label for="celsiusToFahrenheit">
+                                            <span class="radio-custom"></span>
+                                            Celsius a Fahrenheit (°C → °F)
+                                        </label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input 
+                                            type="radio" 
+                                            id="fahrenheitToCelsius" 
+                                            name="conversionType" 
+                                            value="fahrenheit-to-celsius"
+                                        >
+                                        <label for="fahrenheitToCelsius">
+                                            <span class="radio-custom"></span>
+                                            Fahrenheit a Celsius (°F → °C)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="convertButton" class="btn btn-primary">
+                                <span class="btn-text">Convertir</span>
+                                <span class="loading-spinner hidden">⏳</span>
+                            </button>
+                        </form>
+
+                        <div id="result" class="result-section hidden">
+                            <div class="result-card">
+                                <div class="result-header">
+                                    <h3>📊 Resultado de la Conversión</h3>
+                                </div>
+                                <div class="result-content">
+                                    <div class="conversion-display">
+                                        <div class="original-temp">
+                                            <span class="temp-value" id="originalTemp"></span>
+                                            <span class="temp-unit" id="originalUnit"></span>
+                                        </div>
+                                        <div class="conversion-arrow">→</div>
+                                        <div class="converted-temp">
+                                            <span class="temp-value" id="convertedTemp"></span>
+                                            <span class="temp-unit" id="convertedUnit"></span>
+                                        </div>
+                                    </div>
+                                    <div class="formula-display">
+                                        <strong>Fórmula utilizada:</strong> <span id="formulaUsed"></span>
+                                    </div>
+                                    <div class="context-info">
+                                        <span id="temperatureContext"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="errorResult" class="error-result hidden">
+                            <div class="error-card">
+                                <h3>❌ Error en la Conversión</h3>
+                                <p id="errorMessage"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-section">
+                <div class="card">
+                    <div class="card__header">
+                        <h2>📝 Historial de Conversiones</h2>
+                        <button id="clearHistory" class="btn btn-secondary btn-sm">Limpiar</button>
+                    </div>
+                    <div class="card__body">
+                        <div id="historyContainer" class="history-container">
+                            <div class="history-empty">
+                                <p>No hay conversiones realizadas aún</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <div class="card">
+                    <div class="card__header">
+                        <h2>ℹ️ Información de la API</h2>
+                    </div>
+                    <div class="card__body">
+                        <div class="api-endpoints">
+                            <h3>🔗 Endpoints Disponibles</h3>
+                            <div class="endpoint-list">
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/api/temperature/celsius-to-fahrenheit/{value}</code>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/api/temperature/fahrenheit-to-celsius/{value}</code>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method post">POST</span>
+                                    <code>/api/temperature/celsius-to-fahrenheit</code>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method post">POST</span>
+                                    <code>/api/temperature/fahrenheit-to-celsius</code>
+                                </div>
+                                <div class="endpoint-item">
+                                    <span class="method get">GET</span>
+                                    <code>/api/temperature/health</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="conversion-examples">
+                            <h3>📏 Ejemplos de Conversión</h3>
+                            <div class="examples-grid">
+                                <div class="example">
+                                    <span class="temp">0°C</span> = <span class="temp">32°F</span>
+                                    <small>Punto de congelación</small>
+                                </div>
+                                <div class="example">
+                                    <span class="temp">37°C</span> = <span class="temp">98.6°F</span>
+                                    <small>Temperatura corporal</small>
+                                </div>
+                                <div class="example">
+                                    <span class="temp">100°C</span> = <span class="temp">212°F</span>
+                                    <small>Punto de ebullición</small>
+                                </div>
+                                <div class="example">
+                                    <span class="temp">-40°C</span> = <span class="temp">-40°F</span>
+                                    <small>Escalas coinciden</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>
+                TEST
+            </p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

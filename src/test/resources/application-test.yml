@@ -1,0 +1,33 @@
+# Configuración para tests
+server:
+  port: 0  # Puerto aleatorio para tests
+
+spring:
+  application:
+    name: temperature-converter-api-test
+
+# Configuración de logging para tests
+logging:
+  level:
+    com.temperature.api: DEBUG
+    org.springframework.test: INFO
+    org.springframework.web: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Desactivar Swagger en tests
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+# Configuración específica para tests de integración con Selenium
+selenium:
+  webdriver:
+    timeout: 10
+    implicit-wait: 5
+  browser:
+    headless: true
+    window-size: 1920x1080
+  base-url: http://localhost:${local.server.port}
