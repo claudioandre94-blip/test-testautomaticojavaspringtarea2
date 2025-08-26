@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn clean verify package -Dtest='!TemperatureConverterSeleniumTest'
+      run: mvn clean verify package -Dtest=!TemperatureConverterSeleniumTest
     - name: SonarCloud SCan
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
