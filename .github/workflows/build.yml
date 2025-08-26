@@ -34,7 +34,7 @@ jobs:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
       run: 
-        mvn -B org.sonarsource.scanner.maven:sonar-maven-plugi:sonar \
+        mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
         -Dsonar.proyectKey=claudioandre94-blip_test-testautomaticojavaspringtarea2 \
         -Dsonar.organization=claudioandre94-blip \
         -Dsonar.host.url=https://sonarcloud.io \
