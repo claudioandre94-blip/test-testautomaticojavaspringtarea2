@@ -34,7 +34,7 @@ jobs:
 
     - name: Build image
       run: |
-        docker java-version
+        docker version
         docker build -t temperature-converter .
     
     - name: Check Docker Compose
