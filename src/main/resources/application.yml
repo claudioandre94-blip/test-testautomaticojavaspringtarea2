@@ -19,13 +19,6 @@ spring:
     deserialization:
       fail-on-unknown-properties: false
 
-  # Configuración de validación
-  mvc:
-    throw-exception-if-no-handler-found: true
-  web:
-    resources:
-      add-mappings: false
-
 # Configuración de la aplicación
 app:
   title: Temperature Conversion API
